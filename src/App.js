@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Dashboard from './components/Dashboard.js';
 import Preferences from './components/Preferences.js';
 import Login from './components/Login/Login.js';
@@ -8,13 +7,14 @@ import {
   Routes
 } from 'react-router-dom'
 import "./App.css";
+import useToken from './useToken';
 
 export default function App() {
 
-  const [user, setUser] = useState({});
+  const { userToken, setUserToken } = useToken();
 
-  if (!user.token) {
-    return <Login setUser={setUser} />
+  if (!userToken) {
+    return <Login setUserToken={setUserToken} />
   }
 
   return (
