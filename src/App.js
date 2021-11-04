@@ -2,7 +2,6 @@ import Dashboard from './components/Dashboard.js';
 import Preferences from './components/Preferences.js';
 import Login from './components/Login/Login.js';
 import {
-  BrowserRouter as Router,
   Route,
   Routes,
   Link,
@@ -15,8 +14,8 @@ function Logger() {
   let navigate = useNavigate();
 
   function handleLogout() {
-    localStorage.clear()
     navigate("../", { replace: true });
+    localStorage.clear()
     window.location.reload();
   }
 
@@ -33,18 +32,26 @@ export default function App() {
     return <Login setUserToken={setUserToken} />
   }
 
+  const activityTracker = () => {
+    let oldTokenString = localStorage.getItem('token');
+    let token = JSON.parse(oldTokenString)?.token
+    let tokenString = JSON.stringify({
+      'token': token,
+      'expiry': new Date().getTime() + 10000
+    })
+    localStorage.setItem('token', tokenString)
+  }
+
   return (
-    <div className="wrapper">
-      <h1>Application</h1>
-      <Router>
-      <Link to="/dashboard">Dashboard</Link>
-      <Link to="/preferences">Preferences</Link>
-        <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/preferences" element={<Preferences />} />
-        </Routes>
-        <Logger />
-      </Router>
-    </div>
+      <div onClick={activityTracker} className="wrapper">
+        <h1>Application</h1>
+        <Link to="/dashboard">Dashboard</Link>
+        <Link to="/preferences">Preferences</Link>
+          <Routes>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/preferences" element={<Preferences />} />
+          </Routes>
+          <Logger />
+      </div>
   );
 }
