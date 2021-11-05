@@ -27,19 +27,33 @@ function Logger() {
 export default function App() {
 
   const { userToken, setUserToken } = useToken();
+  let navigate = useNavigate();
 
   if (!userToken) {
     return <Login setUserToken={setUserToken} />
   }
 
+  function handleLogout() {
+    navigate("../", { replace: true });
+    localStorage.clear()
+    window.location.reload();
+  }
+
   const activityTracker = () => {
     let oldTokenString = localStorage.getItem('token');
-    let token = JSON.parse(oldTokenString)?.token
-    let tokenString = JSON.stringify({
-      'token': token,
-      'expiry': new Date().getTime() + 10000
-    })
-    localStorage.setItem('token', tokenString)
+    let token = JSON.parse(oldTokenString)?.token;
+    let oldExpiry = JSON.parse(oldTokenString)?.expiry;
+    let timeNow = new Date().getTime();
+    if (timeNow > oldExpiry + 10000) {
+      alert('Logged out for inactivity')
+      handleLogout()
+    } else {
+      let tokenString = JSON.stringify({
+        'token': token,
+        'expiry': new Date().getTime() + 10000
+      })
+      localStorage.setItem('token', tokenString)
+    }
   }
 
   return (
