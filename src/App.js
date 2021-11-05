@@ -10,15 +10,7 @@ import {
 import "./App.css";
 import useToken from './useToken';
 
-function Logger() {
-  let navigate = useNavigate();
-
-  function handleLogout() {
-    navigate("../", { replace: true });
-    localStorage.clear()
-    window.location.reload();
-  }
-
+function Logger({handleLogout}) {
   return(
     <button onClick={handleLogout}>Logout</button>
   )
@@ -33,7 +25,7 @@ export default function App() {
     return <Login setUserToken={setUserToken} />
   }
 
-  function handleLogout() {
+  const handleLogout = () => {
     navigate("../", { replace: true });
     localStorage.clear()
     window.location.reload();
@@ -65,7 +57,7 @@ export default function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/preferences" element={<Preferences />} />
           </Routes>
-          <Logger />
+          <Logger handleLogout={handleLogout}/>
       </div>
   );
 }
