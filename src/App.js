@@ -27,7 +27,7 @@ export default function App() {
 
   const handleLogout = () => {
     navigate("../", { replace: true });
-    localStorage.clear()
+    localStorage.clear('token')
     window.location.reload();
   }
 
